@@ -11,9 +11,13 @@ import { useUser } from "@clerk/nextjs";
 import React from "react";
 import { Button } from "../ui/button";
 import HeaderSkeleton from "./HeaderSkeleton";
+import { useTheme } from "next-themes";
+import { MoonIcon, SunIcon } from "lucide-react";
 
 const Header = () => {
   const { user, isLoaded } = useUser();
+  const { theme, setTheme } = useTheme();
+  const darkMode = theme === "dark";
 
   if (!isLoaded) return <HeaderSkeleton />;
   return (
@@ -21,6 +25,13 @@ const Header = () => {
       {user && <h1 className="tex-2xl font-bold">{user?.firstName}</h1>}
 
       <section className="flex items-center gap-5">
+        <Button
+          variant="outline"
+          onClick={() => setTheme(darkMode ? "light" : "dark")}
+        >
+          {darkMode ? <SunIcon /> : <MoonIcon />}
+        </Button>
+
         <SignedOut>
           <SignInButton mode="modal">
             <Button variant="default">Sign In</Button>

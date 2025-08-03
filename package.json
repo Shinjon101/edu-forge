@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:gen":"drizzle-kit generate",
+    "db:migrate":"tsx ./src/db/migrate.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.28.0",

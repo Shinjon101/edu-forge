@@ -13,7 +13,6 @@ export const users = pgTable("users", {
   id: text("id").primaryKey(),
   email: text("email").notNull(),
   name: text("name"),
-  role: text("role").$type<"teacher" | "student">().notNull(),
 });
 
 export const classrooms = pgTable("classrooms", {

@@ -1,11 +1,11 @@
 import {
-  boolean,
   pgTable,
-  primaryKey,
-  serial,
   text,
+  varchar,
   timestamp,
-  unique,
+  boolean,
+  serial,
+  primaryKey,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
@@ -13,6 +13,7 @@ export const users = pgTable("users", {
   id: text("id").primaryKey(),
   email: text("email").notNull(),
   name: text("name"),
+  role: text("role").$type<"teacher" | "student">().notNull(),
 });
 
 export const classrooms = pgTable("classrooms", {
@@ -24,37 +25,39 @@ export const classrooms = pgTable("classrooms", {
     .references(() => users.id)
     .notNull(),
   created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  code: varchar("code", { length: 4 }).notNull().unique(),
+  archived: boolean("archived").default(false),
 });
 
 export const classroomMembers = pgTable(
   "classroom_members",
   {
-    user_id: text("user_id")
-      .references(() => users.id)
-      .notNull(),
     classroom_id: text("classroom_id")
       .references(() => classrooms.id)
       .notNull(),
-    role: text("role", { enum: ["teacher", "student"] }).notNull(),
+    user_id: text("user_id")
+      .references(() => users.id)
+      .notNull(),
+    joined_at: timestamp("joined_at", { withTimezone: true }).defaultNow(),
   },
   (t) => ({
-    pk: primaryKey({ columns: [t.user_id, t.classroom_id] }),
+    pk: primaryKey({ columns: [t.classroom_id, t.user_id] }),
   })
 );
 
 export const tasks = pgTable("tasks", {
   id: text("id").primaryKey(),
-  title: text("title").notNull(),
-  description: text("description"),
-  subject: text("subject").notNull(),
   classroom_id: text("classroom_id")
     .references(() => classrooms.id)
     .notNull(),
   created_by: text("created_by")
     .references(() => users.id)
     .notNull(),
-  due_date: timestamp("due_date", { withTimezone: true }),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  deadline: timestamp("deadline", { withTimezone: true }),
   created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  archived: boolean("archived").default(false),
 });
 
 export const questions = pgTable("questions", {
@@ -62,29 +65,87 @@ export const questions = pgTable("questions", {
   task_id: text("task_id")
     .references(() => tasks.id)
     .notNull(),
-  question_text: text("question_text").notNull(),
-  subject: text("subject").notNull(),
-  created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  content: text("content").notNull(),
 });
 
-export const submissions = pgTable(
-  "submissions",
+export const studentResponses = pgTable(
+  "student_responses",
   {
-    id: serial("id").primaryKey(),
-    question_id: serial("question_id")
-      .references(() => questions.id)
-      .notNull(),
     user_id: text("user_id")
       .references(() => users.id)
       .notNull(),
-    classroom_id: text("classroom_id")
-      .references(() => classrooms.id)
+    question_id: serial("question_id").notNull(),
+    task_id: text("task_id")
+      .references(() => tasks.id)
       .notNull(),
-    response: text("response"),
     attempted: boolean("attempted").default(false),
     submitted_at: timestamp("submitted_at", { withTimezone: true }),
   },
   (t) => ({
-    uniqueAttempt: unique().on(t.question_id, t.user_id),
+    pk: primaryKey({ columns: [t.user_id, t.question_id, t.task_id] }),
+  })
+);
+
+export const usersRelations = relations(users, ({ many }) => ({
+  classroomsCreated: many(classrooms),
+  classroomMemberships: many(classroomMembers),
+  tasksCreated: many(tasks),
+  responses: many(studentResponses),
+}));
+
+export const classroomsRelations = relations(classrooms, ({ one, many }) => ({
+  createdBy: one(users, {
+    fields: [classrooms.created_by],
+    references: [users.id],
+  }),
+  members: many(classroomMembers),
+  tasks: many(tasks),
+}));
+
+export const classroomMembersRelations = relations(
+  classroomMembers,
+  ({ one }) => ({
+    classroom: one(classrooms, {
+      fields: [classroomMembers.classroom_id],
+      references: [classrooms.id],
+    }),
+    user: one(users, {
+      fields: [classroomMembers.user_id],
+      references: [users.id],
+    }),
+  })
+);
+
+export const tasksRelations = relations(tasks, ({ one, many }) => ({
+  classroom: one(classrooms, {
+    fields: [tasks.classroom_id],
+    references: [classrooms.id],
+  }),
+  createdBy: one(users, {
+    fields: [tasks.created_by],
+    references: [users.id],
+  }),
+  questions: many(questions),
+  responses: many(studentResponses),
+}));
+
+export const questionsRelations = relations(questions, ({ one, many }) => ({
+  task: one(tasks, {
+    fields: [questions.task_id],
+    references: [tasks.id],
+  }),
+}));
+
+export const studentResponsesRelations = relations(
+  studentResponses,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [studentResponses.user_id],
+      references: [users.id],
+    }),
+    task: one(tasks, {
+      fields: [studentResponses.task_id],
+      references: [tasks.id],
+    }),
   })
 );

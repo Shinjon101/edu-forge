@@ -13,6 +13,7 @@ import { Button } from "../ui/button";
 import HeaderSkeleton from "./HeaderSkeleton";
 import { useTheme } from "next-themes";
 import { MoonIcon, SunIcon } from "lucide-react";
+import SideBar from "../sidebar/SideBar";
 
 const Header = () => {
   const { user, isLoaded } = useUser();
@@ -22,7 +23,9 @@ const Header = () => {
   if (!isLoaded) return <HeaderSkeleton />;
   return (
     <header className="flex items-center justify-between p-5 bg-secondary">
-      {user && <h1 className="tex-2xl font-bold">{user?.firstName}</h1>}
+      <div className="md:hidden">
+        <SideBar />
+      </div>
 
       <section className="flex items-center gap-5">
         <Button

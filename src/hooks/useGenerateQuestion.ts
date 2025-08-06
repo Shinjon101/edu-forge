@@ -1,18 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { generateQuestion } from "../../actions/generate-questions";
 
-export function useGenerateQuestions(prompt: string, classroomId: string) {
-  return useQuery({
-    queryKey: ["generate-questions", prompt, classroomId],
-    queryFn: async () => {
-      const res = await fetch(
-        `/api/generate-question?prompt=${encodeURIComponent(
-          prompt
-        )}&classroomId=${classroomId}`
-      );
-      if (!res.ok) throw new Error("Failed to generate questions");
-      const data = await res.json();
-      return data.result;
-    },
-    enabled: !!prompt && !!classroomId,
+export function useGenerateQuestions(classroomId: string) {
+  return useMutation({
+    mutationFn: (prompt: string) => generateQuestion(prompt, classroomId),
   });
 }

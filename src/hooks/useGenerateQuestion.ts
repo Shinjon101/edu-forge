@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { generateQuestion } from "../../actions/generate-questions";
+import { generateQuestion } from "../../actions/generateQuestions";
 
 export function useGenerateQuestions(classroomId: string) {
   return useMutation({

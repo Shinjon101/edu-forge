@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { createClassroom } from "../../actions/create-classroom";
+import { createClassroom } from "../../actions/createClassroom";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 

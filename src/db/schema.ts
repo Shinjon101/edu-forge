@@ -37,6 +37,7 @@ export const classroomMembers = pgTable(
     user_id: text("user_id")
       .references(() => users.id)
       .notNull(),
+    role: text("role").notNull().default("student"),
     joined_at: timestamp("joined_at", { withTimezone: true }).defaultNow(),
   },
   (t) => ({

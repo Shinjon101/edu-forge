@@ -1,0 +1,1 @@
+ALTER TABLE "classroom_members" ADD COLUMN "role" text DEFAULT 'student' NOT NULL;

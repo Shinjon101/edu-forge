@@ -3,11 +3,6 @@
 import { getClassroomById } from "./getClassroomById";
 import { openai } from "@/lib/openai";
 
-/**
- * Cleans up the AI response to remove any unexpected formatting like JSON, code blocks, etc.
- * - Strips triple backticks or JSON-like responses
- * - Ensures math LaTeX is preserved
- */
 function cleanAIResponse(text: string): string {
   // Remove triple backticks (markdown code block)
   const noCodeBlocks = text.replace(/```[\s\S]*?```/g, "");

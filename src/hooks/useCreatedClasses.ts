@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getCreatedClasses } from "../../actions/get-created-classes";
+import { getCreatedClasses } from "../../actions/getCreatedClasses";
 
 export const useCreatedClasses = () => {
   return useQuery({

@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { useGenerateQuestions } from "../hooks/useGenerateQuestion";
+import { usePublishTask } from "../hooks/usePublishTask";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { AlertCircleIcon, Loader2, Pencil, Save } from "lucide-react";
 import { InlineMath } from "react-katex";
@@ -13,23 +15,49 @@ import "katex/dist/katex.min.css";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function GenerateTaskPage() {
+  const [taskTitle, setTaskTitle] = useState("New Task");
+  const [tempTitle, setTempTitle] = useState("New Task");
   const [prompt, setPrompt] = useState("");
+  const [lastPrompt, setLastPrompt] = useState("");
   const [rawText, setRawText] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
   const params = useParams();
   const classroomId = params?.id as string;
 
-  const { mutate, isPending, error } = useGenerateQuestions(classroomId);
+  const {
+    mutate: generate,
+    isPending: isGenerating,
+    error: generateError,
+  } = useGenerateQuestions(classroomId);
+
+  const {
+    mutate: publish,
+    isPending: isPublishing,
+    error: publishError,
+  } = usePublishTask(classroomId);
 
   const handleGenerate = () => {
     if (!prompt.trim()) return;
-    mutate(prompt, {
+    generate(prompt, {
       onSuccess: (data) => {
         setRawText(data);
         setIsEditing(false);
+        setLastPrompt(prompt);
       },
     });
+  };
+
+  const handlePublish = () => {
+    if (!taskTitle.trim()) {
+      // add toast error here
+      return;
+    }
+    publish({ title: taskTitle, rawText });
+  };
+
+  const handleUpdateTitle = () => {
+    setTaskTitle(tempTitle.trim() || "New Task");
   };
 
   const renderLine = (line: string, index: number) => {
@@ -54,14 +82,29 @@ export default function GenerateTaskPage() {
 
   return (
     <div className="max-w-2xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Generate Questions</h1>
+      <div className="flex items-center gap-2 mb-4">
+        <Input
+          placeholder="Enter task title..."
+          value={tempTitle}
+          onChange={(e) => setTempTitle(e.target.value)}
+        />
+        <Button
+          onClick={handleUpdateTitle}
+          size="sm"
+          disabled={tempTitle.trim() === taskTitle.trim()}
+        >
+          Update
+        </Button>
+      </div>
 
-      {error && (
+      {(generateError || publishError) && (
         <Alert variant="destructive">
           <AlertCircleIcon />
-          <AlertTitle>An Error occured</AlertTitle>
+          <AlertTitle>An Error Occurred</AlertTitle>
           <AlertDescription>
-            <p>{(error as Error)?.message || "Something went wrong"}</p>
+            {(generateError as Error)?.message ||
+              (publishError as Error)?.message ||
+              "Something went wrong"}
           </AlertDescription>
         </Alert>
       )}
@@ -79,18 +122,20 @@ export default function GenerateTaskPage() {
               {lines.map((line, idx) => renderLine(line, idx))}
             </ScrollArea>
           )}
-
           <div className="flex justify-end items-center">
             <button
               onClick={() => setIsEditing((prev) => !prev)}
               className="text-sm text-muted-foreground flex items-center hover:text-primary"
             >
               {isEditing ? (
-                <Save className="w-4 h-4" />
+                <>
+                  <Save className="w-4 h-4 mr-1" /> Save
+                </>
               ) : (
-                <Pencil className="w-4 h-4" />
+                <>
+                  <Pencil className="w-4 h-4 mr-1" /> Edit
+                </>
               )}
-              {isEditing ? "Save" : "Edit"}
             </button>
           </div>
         </Card>
@@ -103,10 +148,27 @@ export default function GenerateTaskPage() {
         className="mb-2"
       />
 
-      <Button onClick={handleGenerate} disabled={isPending} className="mb-4">
-        {isPending ? <Loader2 className="animate-spin mr-2" /> : null}
+      <Button
+        onClick={handleGenerate}
+        disabled={
+          isGenerating || !prompt.trim() || prompt.trim() === lastPrompt.trim()
+        }
+        className="mb-4"
+      >
+        {isGenerating && <Loader2 className="animate-spin mr-2" />}
         Generate
       </Button>
+
+      {rawText && (
+        <Button
+          onClick={handlePublish}
+          disabled={isPublishing}
+          className="mb-4 ml-2"
+        >
+          {isPublishing && <Loader2 className="animate-spin mr-2" />}
+          Publish
+        </Button>
+      )}
     </div>
   );
 }

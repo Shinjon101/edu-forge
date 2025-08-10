@@ -13,6 +13,14 @@ import { AlertCircleIcon, Loader2, Pencil, Save } from "lucide-react";
 import { InlineMath } from "react-katex";
 import "katex/dist/katex.min.css";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Calendar } from "@/components/ui/calendar";
 
 export default function GenerateTaskPage() {
   const [taskTitle, setTaskTitle] = useState("New Task");
@@ -21,6 +29,8 @@ export default function GenerateTaskPage() {
   const [lastPrompt, setLastPrompt] = useState("");
   const [rawText, setRawText] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [showDeadlineModal, setShowDeadlineModal] = useState(false);
+  const [deadline, setDeadline] = useState<Date | undefined>(undefined);
 
   const params = useParams();
   const classroomId = params?.id as string;
@@ -48,12 +58,14 @@ export default function GenerateTaskPage() {
     });
   };
 
-  const handlePublish = () => {
-    if (!taskTitle.trim()) {
-      // add toast error here
-      return;
-    }
-    publish({ title: taskTitle, rawText });
+  const handlePublishClick = () => {
+    if (!taskTitle.trim()) return;
+    setShowDeadlineModal(true);
+  };
+
+  const confirmPublish = () => {
+    publish({ title: taskTitle, rawText, deadline });
+    setShowDeadlineModal(false);
   };
 
   const handleUpdateTitle = () => {
@@ -161,7 +173,7 @@ export default function GenerateTaskPage() {
 
       {rawText && (
         <Button
-          onClick={handlePublish}
+          onClick={handlePublishClick}
           disabled={isPublishing}
           className="mb-4 ml-2"
         >
@@ -169,6 +181,36 @@ export default function GenerateTaskPage() {
           Publish
         </Button>
       )}
+
+      <Dialog open={showDeadlineModal} onOpenChange={setShowDeadlineModal}>
+        <DialogContent>
+          <DialogTitle className="text-center">Set Task Deadline</DialogTitle>
+
+          <div className="flex justify-center items-center py-4 ">
+            <Calendar
+              mode="single"
+              selected={deadline}
+              onSelect={setDeadline}
+              disabled={(date) =>
+                date < new Date(new Date().setHours(0, 0, 0, 0))
+              }
+              className="rounded-md border"
+            />
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowDeadlineModal(false)}
+            >
+              Cancel
+            </Button>
+            <Button onClick={confirmPublish} disabled={isPublishing}>
+              {isPublishing && <Loader2 className="animate-spin mr-2" />}
+              Confirm
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

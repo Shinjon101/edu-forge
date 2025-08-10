@@ -79,7 +79,7 @@ export const studentResponses = pgTable(
       .references(() => tasks.id)
       .notNull(),
     attempted: boolean("attempted").default(false),
-    submitted_at: timestamp("submitted_at", { withTimezone: true }),
+    submitted_at: timestamp("submitted_at", { withTimezone: false }),
   },
   (t) => ({
     pk: primaryKey({ columns: [t.user_id, t.question_id, t.task_id] }),

@@ -9,7 +9,8 @@ import { v4 as uuidv4 } from "uuid";
 export async function publishTask(
   classroomId: string,
   title: string,
-  rawText: string
+  rawText: string,
+  deadline?: Date
 ) {
   const { userId } = await auth();
   if (!userId) throw new Error("You must be signed in to publish a task.");
@@ -26,6 +27,7 @@ export async function publishTask(
     created_by: userId,
     title: title.trim(),
     content: rawText.trim(),
+    deadline: deadline ?? null,
   });
 
   const questionList = rawText

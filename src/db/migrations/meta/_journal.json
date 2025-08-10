@@ -15,6 +15,13 @@
       "when": 1754547291013,
       "tag": "0001_fuzzy_avengers",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1754851055525,
+      "tag": "0002_nice_triton",
+      "breakpoints": true
     }
   ]
 }

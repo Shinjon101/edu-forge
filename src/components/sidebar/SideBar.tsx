@@ -8,9 +8,15 @@ import {
 } from "../ui/sheet";
 import { MenuIcon } from "lucide-react";
 import { CreatedClassesList } from "../CreatedClassesList";
+import { JoinedClassesList } from "../JoinedClassesList";
 
 const SideBar = () => {
-  const menu = <CreatedClassesList />;
+  const menu = (
+    <>
+      <CreatedClassesList />
+      <JoinedClassesList />
+    </>
+  );
 
   return (
     <aside className="h-full  p-2 md:p-5">

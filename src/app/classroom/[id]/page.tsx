@@ -1,23 +1,16 @@
-"use client";
-import { Button } from "@/components/ui/button";
+import Classroom from "@/components/Classroom";
 
-import { useRouter } from "next/navigation";
+import { checkMembership } from "../../../../actions/checkMembership";
 
-export default function ClassroomPage({ params }: { params: { id: string } }) {
-  const router = useRouter();
+const page = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = await params;
 
+  const { role } = await checkMembership(id);
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Classroom:</h1>
-      <p className="mb-6 text-muted-foreground">
-        Welcome to your classroom dashboard. You can start by adding a new task.
-      </p>
-
-      <Button
-        onClick={() => router.push(`/classroom/${params.id}/create-task`)}
-      >
-        Add Task
-      </Button>
+    <div className="flex flex-col flex-1 min-h-screen">
+      <Classroom role={role} classId={id} />
     </div>
   );
-}
+};
+
+export default page;

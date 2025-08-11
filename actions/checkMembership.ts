@@ -22,6 +22,9 @@ export async function checkMembership(classroomId: string) {
   }
 
   const member = await db.query.classroomMembers.findFirst({
+    columns: {
+      role: true,
+    },
     where: and(
       eq(classroomMembers.classroom_id, classroomId),
       eq(classroomMembers.user_id, userId)
@@ -32,5 +35,5 @@ export async function checkMembership(classroomId: string) {
     notFound();
   }
 
-  return { access: "member" };
+  return { access: "member", role: member.role };
 }

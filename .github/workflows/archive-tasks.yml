@@ -1,26 +1,22 @@
-name: Archive Expired Tasks
+name: Auto Archive Tasks
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: "0 0 * * *"
-  workflow_dispatch:
 
 jobs:
-  archive:
+  archive-tasks:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      - name: Install dependencies
-        run: npm install
+      - run: npm ci
 
-      - name: Run archive script
-        run: npx tsx scripts/archiveTasks.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      - run: npx tsx scripts/archiveTasks.ts

@@ -191,9 +191,9 @@ export default function GenerateTaskPage() {
               mode="single"
               selected={deadline}
               onSelect={setDeadline}
-              disabled={(date) =>
+              /*   disabled={(date) =>
                 date < new Date(new Date().setHours(0, 0, 0, 0))
-              }
+              } */
               className="rounded-md border"
             />
           </div>

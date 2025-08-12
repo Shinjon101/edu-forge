@@ -14,7 +14,7 @@ export default function ClassroomPage({ role, classId }: Props) {
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Classroom:</h1>
+      <h1 className="text-2xl font-bold mb-4">Classroom</h1>
 
       {role === "teacher" ? (
         <>
@@ -32,6 +32,7 @@ export default function ClassroomPage({ role, classId }: Props) {
         <p className="text-muted-foreground">Student dashboard scaffold...</p>
       )}
       <div className="mt-10">
+        <h2 className="font-bold text-2xl mb-5">Tasks:</h2>
         <ActiveTasksList classID={classId} />
       </div>
     </div>

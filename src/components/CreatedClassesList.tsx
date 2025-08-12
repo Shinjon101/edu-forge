@@ -9,7 +9,8 @@ export const CreatedClassesList = () => {
   const { data: createdClasses, isLoading, isError } = useCreatedClasses();
 
   const renderClassLink = (cls: { id: string; name: string }) => {
-    const isActive = pathname === `/classroom/${cls.id}`;
+    const isActive =
+      pathname === `/classroom/${cls.id}` || `/classroom/${cls.id}/task/\\`;
     return (
       <Link
         key={cls.id}

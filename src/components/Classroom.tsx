@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 
 import { useRouter } from "next/navigation";
 import { ActiveTasksList } from "./ActiveTaskList";
+import { ArchivedTasksModal } from "./ArchivedTasksModal";
 
 interface Props {
   role: string;
@@ -14,23 +15,23 @@ export default function ClassroomPage({ role, classId }: Props) {
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Classroom</h1>
+      {/* Header Row - Mobile first */}
+      <div className="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-2xl font-bold">Classroom</h1>
 
-      {role === "teacher" ? (
-        <>
-          <p className="mb-6 text-muted-foreground">
-            Welcome to your classroom dashboard. You can start by adding a new
-            task.
-          </p>
-          <Button
-            onClick={() => router.push(`/classroom/${classId}/create-task`)}
-          >
-            Add Task
-          </Button>
-        </>
-      ) : (
-        <p className="text-muted-foreground">Student dashboard scaffold...</p>
-      )}
+        <div className="flex flex-col gap-2 sm:flex-row sm:gap-2">
+          <ArchivedTasksModal classroomId={classId} />
+          {role === "teacher" && (
+            <Button
+              onClick={() => router.push(`/classroom/${classId}/create-task`)}
+            >
+              Add Task
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {/* Task List Section */}
       <div className="mt-10">
         <h2 className="font-bold text-2xl mb-5">Tasks:</h2>
         <ActiveTasksList classID={classId} />

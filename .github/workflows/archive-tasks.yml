@@ -8,8 +8,6 @@ on:
 jobs:
   archive-tasks:
     runs-on: ubuntu-latest
-    env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
     steps:
       - uses: actions/checkout@v4
 
@@ -19,4 +17,6 @@ jobs:
 
       - run: npm ci
 
-      - run: npx tsx scripts/archiveTasks.ts
+      - run: NODE_ENV=production npx tsx scripts/archiveTasks.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}

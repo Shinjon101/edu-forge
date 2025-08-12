@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 
 import { useRouter } from "next/navigation";
+import { ActiveTasksList } from "./ActiveTaskList";
 
 interface Props {
   role: string;
@@ -30,6 +31,9 @@ export default function ClassroomPage({ role, classId }: Props) {
       ) : (
         <p className="text-muted-foreground">Student dashboard scaffold...</p>
       )}
+      <div className="mt-10">
+        <ActiveTasksList classID={classId} />
+      </div>
     </div>
   );
 }

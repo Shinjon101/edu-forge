@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 const CreateClassButton = () => {
   const router = useRouter();
   return (
-    <Button onClick={() => router.push("/create-classroom")} className="m-5">
+    <Button onClick={() => router.push("/create-classroom")}>
       Create Class
     </Button>
   );

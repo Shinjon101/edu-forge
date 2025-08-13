@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ActiveTasksList } from "./ActiveTaskList";
 import { ArchivedTasksModal } from "./ArchivedTasksModal";
 import { useClassroom } from "@/hooks/useClassroom";
+import { ManageUserModal } from "./ManageUserModal";
 
 interface Props {
   role: string;
@@ -29,6 +30,7 @@ export default function ClassroomPage({ role, classId }: Props) {
               Add Task
             </Button>
           )}
+          <ManageUserModal classId={classId} currentUserRole={role} />
         </div>
       </div>
 

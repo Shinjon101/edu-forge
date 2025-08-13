@@ -33,12 +33,14 @@ const SideBar = () => {
             <SheetHeader>
               <SheetTitle className="text-center">Menu</SheetTitle>
             </SheetHeader>
-            <div className="mt-4">{menu}</div>
+            <div className="mt-4  flex flex-col items-center gap-3">{menu}</div>
           </SheetContent>
         </Sheet>
       </div>
 
-      <div className="hidden h-full flex-col items-center md:flex">{menu}</div>
+      <div className="hidden h-full flex-col items-center md:flex gap-3">
+        {menu}
+      </div>
     </aside>
   );
 };

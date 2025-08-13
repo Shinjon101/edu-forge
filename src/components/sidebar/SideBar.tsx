@@ -9,10 +9,14 @@ import {
 import { MenuIcon } from "lucide-react";
 import { CreatedClassesList } from "../CreatedClassesList";
 import { JoinedClassesList } from "../JoinedClassesList";
+import { JoinClassModal } from "../JoinClassButton";
+import CreateClassButton from "../CreateClassButton";
 
 const SideBar = () => {
   const menu = (
     <>
+      <JoinClassModal />
+      <CreateClassButton />
       <CreatedClassesList />
       <JoinedClassesList />
     </>

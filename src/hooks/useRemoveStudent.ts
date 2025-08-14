@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { removeStudent } from "../../actions/classroomMemberActions"; // your server action
+import { removeStudent } from "../../actions/classroomMemberActions";
 
 export const useRemoveStudent = (classroomId: string) => {
   const queryClient = useQueryClient();

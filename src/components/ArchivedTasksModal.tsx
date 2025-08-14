@@ -21,7 +21,7 @@ export function ArchivedTasksModal({ classroomId }: { classroomId: string }) {
     <>
       <Button variant="secondary" onClick={() => setOpen(true)}>
         <Archive className="w-4 h-4" />
-        View Archived Tasks
+        Archived Tasks
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>

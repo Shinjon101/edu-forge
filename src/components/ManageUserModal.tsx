@@ -26,7 +26,7 @@ export function ManageUserModal({ classId, currentUserRole }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <Button asChild variant="outline" size="sm">
+      <Button asChild variant="outline">
         <DialogTrigger>
           <Users className="h-4 w-4" />
           Members

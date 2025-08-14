@@ -48,10 +48,11 @@ export function JoinClassModal({ trigger }: { trigger?: React.ReactNode }) {
         </DialogHeader>
 
         <Input
-          placeholder="Enter 4-character code"
+          placeholder="* * * *"
           maxLength={4}
           value={code}
           onChange={(e) => setCode(e.target.value.toUpperCase())}
+          className="text-center font-bold text-2xl"
         />
 
         {error && (

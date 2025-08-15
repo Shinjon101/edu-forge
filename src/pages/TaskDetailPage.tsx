@@ -1,7 +1,7 @@
 "use client";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Card } from "@/components/ui/card";
+
 import { Loader2 } from "lucide-react";
 import { InlineMath } from "react-katex";
 import "katex/dist/katex.min.css";

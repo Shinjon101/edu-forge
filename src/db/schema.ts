@@ -63,34 +63,15 @@ export const tasks = pgTable("tasks", {
 export const questions = pgTable("questions", {
   id: serial("id").primaryKey(),
   task_id: text("task_id")
-    .references(() => tasks.id)
+    .references(() => tasks.id, { onDelete: "cascade" })
     .notNull(),
   content: text("content").notNull(),
 });
-
-export const studentResponses = pgTable(
-  "student_responses",
-  {
-    user_id: text("user_id")
-      .references(() => users.id)
-      .notNull(),
-    question_id: serial("question_id").notNull(),
-    task_id: text("task_id")
-      .references(() => tasks.id)
-      .notNull(),
-    attempted: boolean("attempted").default(false),
-    submitted_at: timestamp("submitted_at", { withTimezone: false }),
-  },
-  (t) => ({
-    pk: primaryKey({ columns: [t.user_id, t.question_id, t.task_id] }),
-  })
-);
 
 export const usersRelations = relations(users, ({ many }) => ({
   classroomsCreated: many(classrooms),
   classroomMemberships: many(classroomMembers),
   tasksCreated: many(tasks),
-  responses: many(studentResponses),
 }));
 
 export const classroomsRelations = relations(classrooms, ({ one, many }) => ({
@@ -126,7 +107,6 @@ export const tasksRelations = relations(tasks, ({ one, many }) => ({
     references: [users.id],
   }),
   questions: many(questions),
-  responses: many(studentResponses),
 }));
 
 export const questionsRelations = relations(questions, ({ one, many }) => ({
@@ -135,17 +115,3 @@ export const questionsRelations = relations(questions, ({ one, many }) => ({
     references: [tasks.id],
   }),
 }));
-
-export const studentResponsesRelations = relations(
-  studentResponses,
-  ({ one }) => ({
-    user: one(users, {
-      fields: [studentResponses.user_id],
-      references: [users.id],
-    }),
-    task: one(tasks, {
-      fields: [studentResponses.task_id],
-      references: [tasks.id],
-    }),
-  })
-);

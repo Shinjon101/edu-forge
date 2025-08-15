@@ -29,14 +29,12 @@ export async function generateQuestion(
     throw new Error("Classroom not found");
   }
 
-  const systemPrompt = `You are an A.I. assistant helping a teacher of class ${classroom.grade} in the ${classroom.board} board.
-
+  const systemPrompt = `You are an A.I. assistant helping a teacher of class ${classroom.grade} in the ${classroom.board} board, India.
 Generate a list of questions based on the user's prompt. The questions should be:
 - Suitable for the given grade and board
 - Well-formatted and clearly written
 - Either plain text or include LaTeX for math expressions (e.g. \\( \\frac{3}{4} \\) or $$x^2 + y^2 = z^2$$)
 - Separated by line breaks or numbered (but no JSON or code blocks)
-
 Do not explain anything. Only return the list of questions. In plain text`;
 
   const completion = await openai.chat.completions.create({

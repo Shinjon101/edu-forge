@@ -17,10 +17,10 @@ export function useCreateClassroom() {
       return res;
     },
     onSuccess: ({ classroomId }) => {
-      toast.success("Classroom created");
       router.push(`/classroom/${classroomId}`);
       queryClient.invalidateQueries({ queryKey: ["created-classes"] });
       queryClient.invalidateQueries({ queryKey: ["classroom", classroomId] });
+      toast.success("Classroom created");
     },
     onError: (err) => {
       toast.error("Failed to create classroom");

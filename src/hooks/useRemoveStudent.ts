@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { removeStudent } from "../../actions/classroomMemberActions";
+import { toast } from "sonner";
 
 export const useRemoveStudent = (classroomId: string) => {
   const queryClient = useQueryClient();
@@ -12,6 +13,11 @@ export const useRemoveStudent = (classroomId: string) => {
       queryClient.invalidateQueries({
         queryKey: ["classMembers", classroomId],
       });
+      toast.success("Removed student successfully");
+    },
+
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to remove student");
     },
   });
 };

@@ -18,12 +18,12 @@ export function useUpdateClassName() {
       return await updateName(classId, newName);
     },
     onSuccess: (_, { classId }) => {
-      //toast.success("Class name updated!");
+      toast.success("Class name updated!");
       queryClient.invalidateQueries({ queryKey: ["created-classes"] });
       queryClient.invalidateQueries({ queryKey: ["classroom", classId] });
     },
     onError: (error: any) => {
-      //toast.error(error.message || "Failed to update class name");
+      toast.error(error.message || "Failed to update class name");
     },
   });
 }

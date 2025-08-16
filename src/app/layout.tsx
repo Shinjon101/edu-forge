@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import QueryProvider from "@/components/providers/QueryProvider";
 import SideBar from "@/components/sidebar/SideBar";
 import { addUser } from "../../actions/addUser";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -30,6 +31,7 @@ export default async function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
+              <Toaster richColors position="top-center" />
               <div className="flex flex-col min-h-screen">
                 <Header />
 

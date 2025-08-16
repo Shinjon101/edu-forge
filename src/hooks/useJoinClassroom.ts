@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { joinClassroom } from "../../actions/joinClassroom";
+import { toast } from "sonner";
 
 export function useJoinClassroom() {
   const queryClient = useQueryClient();
@@ -15,6 +16,10 @@ export function useJoinClassroom() {
       queryClient.invalidateQueries({
         queryKey: ["joined-classes"],
       });
+      toast.success("Class joined successfully");
+    },
+    onError: () => {
+      toast.error("Failed to update join class");
     },
   });
 }

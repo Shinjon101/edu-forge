@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Users } from "lucide-react";
-import { RemoveStudentButton } from "./RemoveStudentButton";
+import { RemoveStudentButton } from "./RemoveStudentModal";
 
 interface Props {
   classId: string;

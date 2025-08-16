@@ -7,9 +7,9 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { MenuIcon } from "lucide-react";
-import { CreatedClassesList } from "../CreatedClassesList";
-import { JoinedClassesList } from "../JoinedClassesList";
-import { JoinClassModal } from "../JoinClassButton";
+import { CreatedClassesList } from "../lists/CreatedClassesList";
+import { JoinedClassesList } from "../lists/JoinedClassesList";
+import { JoinClassModal } from "../modals/JoinClassModal";
 import CreateClassButton from "../CreateClassButton";
 
 const SideBar = () => {

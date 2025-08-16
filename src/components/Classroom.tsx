@@ -2,12 +2,12 @@
 import { Button } from "@/components/ui/button";
 
 import { useRouter } from "next/navigation";
-import { ActiveTasksList } from "./ActiveTaskList";
-import { ArchivedTasksModal } from "./ArchivedTasksModal";
+import { ActiveTasksList } from "./lists/ActiveTaskList";
+import { ArchivedTasksModal } from "./modals/ArchivedTasksModal";
 import { useClassroom } from "@/hooks/useClassroom";
-import { ManageUserModal } from "./ManageUserModal";
-import InviteModal from "./InviteModal";
-import { EditClassroomModal } from "./EditClassroomModal";
+import { ManageUserModal } from "./modals/ManageUserModal";
+import InviteModal from "./modals/InviteModal";
+import { EditClassroomModal } from "./modals/EditClassroomModal";
 
 interface Props {
   role: string;

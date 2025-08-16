@@ -4,7 +4,7 @@ import { useActiveTasks } from "@/hooks/useActiveTasks";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
-import { DeleteTaskButton } from "./DeleteTaskButton";
+import { DeleteTaskButton } from "../DeleteTaskButton";
 
 export function ActiveTasksList({ classID }: { classID: string }) {
   const { data: tasks, isLoading, error } = useActiveTasks(classID);

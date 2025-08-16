@@ -1,13 +1,12 @@
 "use client";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-
 import { Loader2 } from "lucide-react";
 import { InlineMath } from "react-katex";
 import "katex/dist/katex.min.css";
 import { useGetQuestionsForTask } from "../hooks/useGetQuestions";
 
-export function TaskDeatailPage({ taskId }: { taskId: string }) {
+function TaskDetailPage({ taskId }: { taskId: string }) {
   const { data: questions, isLoading } = useGetQuestionsForTask(taskId);
 
   const renderLine = (line: string, index: number) => {
@@ -53,3 +52,5 @@ export function TaskDeatailPage({ taskId }: { taskId: string }) {
     </div>
   );
 }
+
+export default TaskDetailPage;

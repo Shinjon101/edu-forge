@@ -1,5 +1,10 @@
-import { TaskDeatailPage } from "@/pages/TaskDetailPage";
+import TaskDetailPage from "@/components/TaskDetailPage";
 
-export default function TaskPage({ params }: { params: { taskId: string } }) {
-  return <TaskDeatailPage taskId={params.taskId} />;
+export default async function TaskPage({
+  params,
+}: {
+  params: Promise<{ id: string; taskId: string }>;
+}) {
+  const { taskId } = await params;
+  return <TaskDetailPage taskId={taskId} />;
 }

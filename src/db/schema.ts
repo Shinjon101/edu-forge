@@ -11,7 +11,7 @@ import { relations } from "drizzle-orm";
 
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
-  email: text("email").notNull(),
+  email: text("email").notNull().unique(),
   name: text("name"),
 });
 
@@ -32,7 +32,7 @@ export const classroomMembers = pgTable(
   "classroom_members",
   {
     classroom_id: text("classroom_id")
-      .references(() => classrooms.id)
+      .references(() => classrooms.id, { onDelete: "cascade" })
       .notNull(),
     user_id: text("user_id")
       .references(() => users.id)
@@ -48,7 +48,7 @@ export const classroomMembers = pgTable(
 export const tasks = pgTable("tasks", {
   id: text("id").primaryKey(),
   classroom_id: text("classroom_id")
-    .references(() => classrooms.id)
+    .references(() => classrooms.id, { onDelete: "cascade" })
     .notNull(),
   created_by: text("created_by")
     .references(() => users.id)

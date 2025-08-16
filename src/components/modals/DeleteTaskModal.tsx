@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useDeleteTask } from "../hooks/useDeleteTasks";
+import { useDeleteTask } from "../../hooks/useDeleteTasks";
 import { useState } from "react";
 import { Trash2 } from "lucide-react";
 

@@ -8,6 +8,7 @@ import { useClassroom } from "@/hooks/useClassroom";
 import { ManageUserModal } from "./modals/ManageUserModal";
 import InviteModal from "./modals/InviteModal";
 import { EditClassroomModal } from "./modals/EditClassroomModal";
+import { Skeleton } from "./ui/skeleton";
 
 interface Props {
   role: string;
@@ -21,7 +22,11 @@ export default function ClassroomPage({ role, classId }: Props) {
     <div className="p-6 max-w-3xl mx-auto">
       <div className="flex flex-col gap-3 mb-4 md:flex-row items-center justify-between">
         <div className="flex flex-row gap-2">
-          <h1 className="text-3xl font-bold">{classroom?.name}</h1>
+          {isLoading ? (
+            <Skeleton className="h-10 w-48 rounded-md" />
+          ) : (
+            <h1 className="text-3xl font-bold">{classroom?.name}</h1>
+          )}
           {role === "teacher" && (
             <EditClassroomModal
               classId={classId}

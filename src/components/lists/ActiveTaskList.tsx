@@ -5,13 +5,14 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { DeleteTaskButton } from "../modals/DeleteTaskModal";
+import { ActiveTasksListSkeleton } from "../skeletons/lists/TaskListSkeletons";
 
 export function ActiveTasksList({ classID }: { classID: string }) {
   const { data: tasks, isLoading, error } = useActiveTasks(classID);
   const router = useRouter();
   const { user } = useUser();
 
-  if (isLoading) return <p>Loading tasks...</p>;
+  if (isLoading) return <ActiveTasksListSkeleton count={5} />;
   if (error) return <p className="text-red-500">Failed to load tasks</p>;
   if (!tasks?.length) return <p>No active tasks 🎉</p>;
 

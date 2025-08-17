@@ -10,7 +10,7 @@ import {
 import { useUser } from "@clerk/nextjs";
 import React from "react";
 import { Button } from "../ui/button";
-import HeaderSkeleton from "./HeaderSkeleton";
+import HeaderSkeleton from "../skeletons/lists/HeaderSkeleton";
 import { useTheme } from "next-themes";
 import { MoonIcon, SunIcon } from "lucide-react";
 import SideBar from "../sidebar/SideBar";
@@ -22,8 +22,8 @@ const Header = () => {
 
   if (!isLoaded) return <HeaderSkeleton />;
   return (
-    <header className="flex items-center justify-between p-5 bg-secondary">
-      <div className="md:hidden">
+    <header className="flex items-center justify-between p-3 bg-secondary">
+      <div className="md:hidden mt-1">
         <SideBar />
       </div>
 

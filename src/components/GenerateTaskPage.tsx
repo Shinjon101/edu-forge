@@ -21,6 +21,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Calendar } from "@/components/ui/calendar";
+import { GenerateTaskSkeleton } from "./skeletons/lists/GenerateTaskSkeleton";
 
 export default function GenerateTaskPage() {
   const [taskTitle, setTaskTitle] = useState("New Task");
@@ -152,6 +153,7 @@ export default function GenerateTaskPage() {
           </div>
         </Card>
       )}
+      {isGenerating && <GenerateTaskSkeleton />}
 
       <Textarea
         placeholder="Enter a prompt to generate questions..."

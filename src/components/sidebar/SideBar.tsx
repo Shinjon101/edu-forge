@@ -26,8 +26,8 @@ const SideBar = () => {
     <aside className="h-full  p-2 md:p-5">
       <div className="md:hidden bg-secondary">
         <Sheet>
-          <SheetTrigger>
-            <MenuIcon className="mt-2 transition-opacity hover:opacity-75" />
+          <SheetTrigger className="cursor-pointer">
+            <MenuIcon />
           </SheetTrigger>
           <SheetContent side="left" className="max-w-sm p-4">
             <SheetHeader>

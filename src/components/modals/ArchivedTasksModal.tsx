@@ -11,10 +11,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Archive } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
+import { DeleteTaskButton } from "./DeleteTaskModal";
+import { ActiveTasksListSkeleton } from "../skeletons/lists/TaskListSkeletons";
 
 export function ArchivedTasksModal({ classroomId }: { classroomId: string }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const { user } = useUser();
   const { data: tasks, isLoading } = useArchivedTasks(classroomId);
 
   return (
@@ -30,7 +34,7 @@ export function ArchivedTasksModal({ classroomId }: { classroomId: string }) {
             <DialogTitle>Archived Tasks</DialogTitle>
           </DialogHeader>
 
-          {isLoading && <p>Loading...</p>}
+          {isLoading && <ActiveTasksListSkeleton count={3} />}
           {!isLoading && (!tasks || tasks.length === 0) && (
             <p className="text-sm text-muted-foreground">
               No archived tasks found.
@@ -40,22 +44,34 @@ export function ArchivedTasksModal({ classroomId }: { classroomId: string }) {
           {!isLoading && tasks && tasks.length > 0 && (
             <div className="space-y-2">
               {tasks.map((task) => (
-                <Button
+                <div
                   key={task.id}
-                  variant="outline"
-                  className="w-full flex justify-between"
-                  onClick={() => {
-                    setOpen(false);
-                    router.push(`/classroom/${classroomId}/task/${task.id}`);
-                  }}
+                  className="flex items-center justify-center gap-2 flex-nowrap p-2"
                 >
-                  <span>{task.title}</span>
-                  {task.deadline && (
-                    <span className="text-sm text-muted-foreground">
-                      {new Date(task.deadline).toLocaleDateString()}
-                    </span>
+                  <Button
+                    key={task.id}
+                    variant="outline"
+                    className="w-full flex justify-between"
+                    onClick={() => {
+                      setOpen(false);
+                      router.push(`/classroom/${classroomId}/task/${task.id}`);
+                    }}
+                  >
+                    <span>{task.title}</span>
+                    {task.deadline && (
+                      <span className="text-sm text-muted-foreground">
+                        {new Date(task.deadline).toLocaleDateString()}
+                      </span>
+                    )}
+                  </Button>
+                  {user?.id === task.created_by && (
+                    <DeleteTaskButton
+                      classroomId={classroomId}
+                      taskId={task.id}
+                      key={task.id + "del"}
+                    />
                   )}
-                </Button>
+                </div>
               ))}
             </div>
           )}

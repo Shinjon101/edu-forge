@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { db } from "@/db";
 import { classroomMembers, classrooms } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
-import { notFound } from "next/navigation";
+import { notFound, redirect, unauthorized } from "next/navigation";
 
 export async function checkMembership(classroomId: string) {
   const { userId } = await auth();
@@ -32,7 +32,7 @@ export async function checkMembership(classroomId: string) {
   });
 
   if (!member) {
-    notFound();
+    redirect("/unauthorized");
   }
 
   return { access: "member", role: member.role };

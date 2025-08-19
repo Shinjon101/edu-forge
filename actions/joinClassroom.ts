@@ -4,13 +4,14 @@ import { db } from "@/db";
 import { classrooms, classroomMembers } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { currentUser } from "@clerk/nextjs/server";
+import { checkAppAccess } from "./checkAppAccess";
 
 export async function joinClassroom(code: string) {
   const user = await currentUser();
   if (!user) {
     return { success: false, reason: "not_logged_in" };
   }
-
+  await checkAppAccess();
   const found = await db
     .select()
     .from(classrooms)

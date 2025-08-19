@@ -2,8 +2,11 @@
 
 import { JoinClassModal } from "@/components/modals/JoinClassModal";
 import CreateClassButton from "@/components/CreateClassButton";
+import { SignUpButton, useAuth } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
+  const { isSignedIn } = useAuth();
   return (
     <main className="flex min-h-screen flex-col items-center p-6">
       <div className="flex flex-col justify-center  items-center gap-2 mb-8">
@@ -18,10 +21,18 @@ export default function HomePage() {
 
       <div className=" gap-6 flex flex-col justify-center items-center">
         <h1 className="animate-pulse  text-3xl font-black"> Get Started </h1>
-        <div className="flex justify-between items-center gap-4">
-          <JoinClassModal />
-          <CreateClassButton />
-        </div>
+        {isSignedIn ? (
+          <div className="flex justify-between items-center gap-4">
+            <JoinClassModal />
+            <CreateClassButton />
+          </div>
+        ) : (
+          <SignUpButton mode="modal">
+            <Button className="mb-5 font-bold max-w-xs h-auto py-3">
+              Sign up
+            </Button>
+          </SignUpButton>
+        )}
       </div>
     </main>
   );

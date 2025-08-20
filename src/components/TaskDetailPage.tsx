@@ -6,10 +6,11 @@ import { InlineMath } from "react-katex";
 import "katex/dist/katex.min.css";
 import { useGetQuestionsForTask } from "../hooks/useGetQuestions";
 import { useTask } from "@/hooks/useTask";
+import TaskDetailSkeleton from "./skeletons/lists/TaskDetailSkeleton";
 
 function TaskDetailPage({ taskId }: { taskId: string }) {
   const { data: questions, isLoading } = useGetQuestionsForTask(taskId);
-  const { data: task, isLoading: taskLoading } = useTask(taskId);
+  const { data: task } = useTask(taskId);
 
   const renderLine = (line: string, index: number) => {
     const parts = line.split(/(\\\(.+?\\\))/g);
@@ -27,11 +28,7 @@ function TaskDetailPage({ taskId }: { taskId: string }) {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center p-8">
-        <Loader2 className="animate-spin" />
-      </div>
-    );
+    return <TaskDetailSkeleton />;
   }
 
   if (!questions?.length) {

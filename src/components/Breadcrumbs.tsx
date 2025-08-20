@@ -11,16 +11,19 @@ import { usePathname } from "next/navigation";
 
 import { useClassroom } from "@/hooks/useClassroom";
 import { useTask } from "@/hooks/useTask";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Breadcrumbs() {
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
 
   const classroomId = segments[1];
-  const { data: classroom } = useClassroom(classroomId ?? "");
+  const { data: classroom, isLoading: classroomLoading } = useClassroom(
+    classroomId ?? ""
+  );
 
   const taskId = segments[2] === "task" && segments[3] ? segments[3] : null;
-  const { data: task } = useTask(taskId ?? "");
+  const { data: task, isLoading: taskLoading } = useTask(taskId ?? "");
 
   if (pathname === "/") return null;
 
@@ -35,12 +38,16 @@ export default function Breadcrumbs() {
           <>
             <BreadcrumbSeparator />
             <BreadcrumbItem className="max-w-[50px] truncate md:max-w-[150px]">
-              <BreadcrumbLink
-                href={`/classroom/${classroomId}`}
-                className="block truncate"
-              >
-                {classroom?.name ?? "Classroom"}
-              </BreadcrumbLink>
+              {classroomLoading ? (
+                <Skeleton className="h-4 w-20 bg-muted" />
+              ) : (
+                <BreadcrumbLink
+                  href={`/classroom/${classroomId}`}
+                  className="block truncate"
+                >
+                  {classroom?.name ?? "Classroom"}
+                </BreadcrumbLink>
+              )}
             </BreadcrumbItem>
           </>
         )}
@@ -60,12 +67,16 @@ export default function Breadcrumbs() {
           <>
             <BreadcrumbSeparator />
             <BreadcrumbItem className="max-w-[60px] truncate md:max-w-[150px]">
-              <BreadcrumbLink
-                href={`/classroom/${classroomId}/task/${taskId}`}
-                className="block truncate"
-              >
-                {task?.title ?? "Task"}
-              </BreadcrumbLink>
+              {taskLoading ? (
+                <Skeleton className="h-4 w-24 bg-muted" />
+              ) : (
+                <BreadcrumbLink
+                  href={`/classroom/${classroomId}/task/${taskId}`}
+                  className="block truncate"
+                >
+                  {task?.title ?? "Task"}
+                </BreadcrumbLink>
+              )}
             </BreadcrumbItem>
           </>
         )}

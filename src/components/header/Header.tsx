@@ -14,6 +14,7 @@ import HeaderSkeleton from "../skeletons/lists/HeaderSkeleton";
 import { useTheme } from "next-themes";
 import { MoonIcon, SunIcon } from "lucide-react";
 import SideBar from "../sidebar/SideBar";
+import Breadcrumbs from "../Breadcrumbs";
 
 const Header = () => {
   const { user, isLoaded } = useUser();
@@ -23,10 +24,19 @@ const Header = () => {
   if (!isLoaded) return <HeaderSkeleton />;
   return (
     <header className="flex items-center justify-between p-3 bg-secondary">
-      <div className="md:hidden mt-1">
-        <SideBar />
+      {/* Left section */}
+      <div className="flex items-center">
+        <div className="md:hidden mt-1">
+          <SideBar />
+        </div>
       </div>
 
+      {/* Center section */}
+      <div className="absolute left-1/2 -translate-x-1/2 mr-2">
+        <Breadcrumbs />
+      </div>
+
+      {/* Right section */}
       <section className="flex items-center gap-5">
         <Button
           variant="outline"

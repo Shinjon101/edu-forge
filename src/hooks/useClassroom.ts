@@ -7,5 +7,6 @@ export const useClassroom = (classID: string) => {
   return useQuery({
     queryKey: ["classroom", classID],
     queryFn: async () => await getClassroomById(classID),
+    enabled: !!classID,
   });
 };

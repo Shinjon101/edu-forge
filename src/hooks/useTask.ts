@@ -7,5 +7,6 @@ export const useTask = (taskId: string) => {
   return useQuery({
     queryKey: ["task", taskId],
     queryFn: async () => await getTask(taskId),
+    enabled: !!taskId,
   });
 };

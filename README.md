@@ -26,6 +26,7 @@ actions/                  # Server actions
 src/
 │
 ├── app/                  # Next.js App Router structure
+|   ├── access-denied     # Page for not having app access              
 │   ├── classroom/        # Page routes for classrooms
 │   ├── create-classroom  # Page for creating classroom
 |   ├── unauthorized      # Page for unauthorized access
@@ -65,6 +66,7 @@ src/
    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=...
    CLERK_SECRET_KEY=...
    OPENROUTER_API_KEY=...
+   ALLOWED_EMAILS=...     #users who can access the app
    ```
 
 4. **Run locally:**

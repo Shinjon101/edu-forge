@@ -8,5 +8,6 @@ export function useGetQuestionsForTask(taskId: string) {
     queryKey: ["questions", taskId],
     queryFn: () => getQuestionsForTask(taskId),
     enabled: !!taskId,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }

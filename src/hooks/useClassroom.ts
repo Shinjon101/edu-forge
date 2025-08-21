@@ -8,5 +8,6 @@ export const useClassroom = (classID: string) => {
     queryKey: ["classroom", classID],
     queryFn: async () => await getClassroomById(classID),
     enabled: !!classID,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 };

@@ -9,14 +9,19 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { AlertCircleIcon, Loader2, Pencil, Save } from "lucide-react";
+import {
+  AlertCircleIcon,
+  Loader2,
+  Pencil,
+  Save,
+  ArrowLeft,
+} from "lucide-react";
 import { InlineMath } from "react-katex";
 import "katex/dist/katex.min.css";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
@@ -30,6 +35,7 @@ export default function GenerateTaskPage() {
   const [lastPrompt, setLastPrompt] = useState("");
   const [rawText, setRawText] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [manualMode, setManualMode] = useState(false);
   const [showDeadlineModal, setShowDeadlineModal] = useState(false);
   const [deadline, setDeadline] = useState<Date | undefined>(undefined);
 
@@ -71,6 +77,12 @@ export default function GenerateTaskPage() {
 
   const handleUpdateTitle = () => {
     setTaskTitle(tempTitle.trim() || "New Task");
+  };
+
+  const handleBack = () => {
+    setManualMode(false);
+    setRawText("");
+    setIsEditing(false);
   };
 
   const renderLine = (line: string, index: number) => {
@@ -122,72 +134,100 @@ export default function GenerateTaskPage() {
         </Alert>
       )}
 
-      {rawText && (
-        <Card className="p-4 mb-4">
-          {isEditing ? (
-            <Textarea
-              value={rawText}
-              onChange={(e) => setRawText(e.target.value)}
-              className="h-64"
-            />
-          ) : (
-            <ScrollArea className="h-[400px] border rounded-lg p-4">
-              {lines.map((line, idx) => renderLine(line, idx))}
-            </ScrollArea>
-          )}
-          <div className="flex justify-end items-center">
-            <button
-              onClick={() => setIsEditing((prev) => !prev)}
-              className="text-sm text-muted-foreground flex items-center hover:text-primary"
-            >
-              {isEditing ? (
-                <>
-                  <Save className="w-4 h-4 mr-1" /> Save
-                </>
+      {(rawText || manualMode) && (
+        <>
+          <Button
+            onClick={handleBack}
+            variant="ghost"
+            className="flex items-center gap-1 mb-2"
+          >
+            <ArrowLeft className="w-4 h-4" /> Back
+          </Button>
+          {!isGenerating && (
+            <Card className="p-4 mb-4">
+              {isEditing || manualMode ? (
+                <Textarea
+                  value={rawText}
+                  onChange={(e) => setRawText(e.target.value)}
+                  className="h-64"
+                />
               ) : (
-                <>
-                  <Pencil className="w-4 h-4 mr-1" /> Edit
-                </>
+                <ScrollArea className="h-[400px] border rounded-lg p-4">
+                  {lines.map((line, idx) => renderLine(line, idx))}
+                </ScrollArea>
               )}
-            </button>
-          </div>
-        </Card>
+              {!manualMode && (
+                <div className="flex justify-end items-center">
+                  <button
+                    onClick={() => setIsEditing((prev) => !prev)}
+                    className="text-sm text-muted-foreground flex items-center hover:text-primary"
+                  >
+                    {isEditing ? (
+                      <>
+                        <Save className="w-4 h-4 mr-1" /> Save
+                      </>
+                    ) : (
+                      <>
+                        <Pencil className="w-4 h-4 mr-1" /> Edit
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
+            </Card>
+          )}
+        </>
       )}
+
       {isGenerating && <GenerateTaskSkeleton />}
 
-      <Textarea
-        placeholder="Enter a prompt to generate questions..."
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
-        className="mb-2"
-      />
+      {!manualMode && (
+        <>
+          <Textarea
+            placeholder="Enter a prompt to generate questions..."
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            className="mb-2"
+          />
 
-      <Button
-        onClick={handleGenerate}
-        disabled={
-          isGenerating || !prompt.trim() || prompt.trim() === lastPrompt.trim()
-        }
-        className="mb-4"
-      >
-        {isGenerating && <Loader2 className="animate-spin mr-2" />}
-        Generate
-      </Button>
+          <div className="flex gap-2 mb-4">
+            <Button
+              onClick={handleGenerate}
+              disabled={
+                isGenerating ||
+                !prompt.trim() ||
+                prompt.trim() === lastPrompt.trim()
+              }
+            >
+              {isGenerating && <Loader2 className="animate-spin mr-2" />}
+              Generate
+            </Button>
+            <Button
+              onClick={() => {
+                setManualMode(true);
+                setIsEditing(true);
+              }}
+            >
+              Add Manually
+            </Button>
 
-      {rawText && (
-        <Button
-          onClick={handlePublishClick}
-          disabled={isPublishing}
-          className="mb-4 ml-2"
-        >
-          {isPublishing && <Loader2 className="animate-spin mr-2" />}
-          Publish
-        </Button>
+            {rawText && (
+              <Button
+                onClick={handlePublishClick}
+                disabled={isPublishing}
+                className="mb-4"
+              >
+                {isPublishing && <Loader2 className="animate-spin mr-2" />}
+                Publish
+              </Button>
+            )}
+          </div>
+        </>
       )}
 
       <Dialog open={showDeadlineModal} onOpenChange={setShowDeadlineModal}>
         <DialogContent>
           <DialogTitle className="text-center">Set Task Deadline</DialogTitle>
-
           <div className="flex justify-center items-center py-4 ">
             <Calendar
               mode="single"

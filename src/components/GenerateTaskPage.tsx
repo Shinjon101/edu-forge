@@ -36,6 +36,7 @@ export default function GenerateTaskPage() {
   const [rawText, setRawText] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [manualMode, setManualMode] = useState(false);
+  const [hasGenerated, setHasGenerated] = useState(false); // NEW
   const [showDeadlineModal, setShowDeadlineModal] = useState(false);
   const [deadline, setDeadline] = useState<Date | undefined>(undefined);
 
@@ -61,6 +62,7 @@ export default function GenerateTaskPage() {
         setRawText(data);
         setIsEditing(false);
         setLastPrompt(prompt);
+        setHasGenerated(true); // hide manual after AI generate
       },
     });
   };
@@ -80,9 +82,13 @@ export default function GenerateTaskPage() {
   };
 
   const handleBack = () => {
+    // reset everything
     setManualMode(false);
+    setHasGenerated(false);
     setRawText("");
     setIsEditing(false);
+    setPrompt("");
+    setLastPrompt("");
   };
 
   const renderLine = (line: string, index: number) => {
@@ -202,23 +208,24 @@ export default function GenerateTaskPage() {
               {isGenerating && <Loader2 className="animate-spin mr-2" />}
               Generate
             </Button>
-            <Button
-              onClick={() => {
-                setManualMode(true);
-                setIsEditing(true);
-              }}
-            >
-              Add Manually
-            </Button>
-
-            {rawText && (
+            {(rawText || manualMode) && (
               <Button
                 onClick={handlePublishClick}
-                disabled={isPublishing}
-                className="mb-4"
+                disabled={isPublishing || !rawText.trim()}
+                className="mb-4 ml-2"
               >
                 {isPublishing && <Loader2 className="animate-spin mr-2" />}
                 Publish
+              </Button>
+            )}
+            {!hasGenerated && (
+              <Button
+                onClick={() => {
+                  setManualMode(true);
+                  setIsEditing(true);
+                }}
+              >
+                Add Manually
               </Button>
             )}
           </div>

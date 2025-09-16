@@ -31,12 +31,12 @@ export function ArchivedTasksModal({ classroomId }: { classroomId: string }) {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Archived Tasks</DialogTitle>
+            <DialogTitle className="text-center">Archived Tasks</DialogTitle>
           </DialogHeader>
 
           {isLoading && <ActiveTasksListSkeleton count={3} />}
           {!isLoading && (!tasks || tasks.length === 0) && (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground text-center">
               No archived tasks found.
             </p>
           )}
@@ -46,20 +46,19 @@ export function ArchivedTasksModal({ classroomId }: { classroomId: string }) {
               {tasks.map((task) => (
                 <div
                   key={task.id}
-                  className="flex items-center justify-center gap-2 flex-nowrap p-2"
+                  className="flex items-center justify-center gap-2 p-2"
                 >
                   <Button
-                    key={task.id}
                     variant="outline"
-                    className="w-full flex justify-between"
+                    className="max-w-[200px] md:max-w-xs"
                     onClick={() => {
                       setOpen(false);
                       router.push(`/classroom/${classroomId}/task/${task.id}`);
                     }}
                   >
-                    <span>{task.title}</span>
+                    <span className="truncate">{task.title}</span>
                     {task.deadline && (
-                      <span className="text-sm text-muted-foreground">
+                      <span className="ml-2 text-sm text-muted-foreground shrink-0">
                         {new Date(task.deadline).toLocaleDateString()}
                       </span>
                     )}
@@ -68,7 +67,6 @@ export function ArchivedTasksModal({ classroomId }: { classroomId: string }) {
                     <DeleteTaskButton
                       classroomId={classroomId}
                       taskId={task.id}
-                      key={task.id + "del"}
                     />
                   )}
                 </div>

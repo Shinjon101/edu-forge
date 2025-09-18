@@ -9,13 +9,16 @@ import { ManageUserModal } from "./modals/ManageUserModal";
 import InviteModal from "./modals/InviteModal";
 import { EditClassroomModal } from "./modals/EditClassroomModal";
 import { Skeleton } from "./ui/skeleton";
+import { LeaveClassroomModal } from "./modals/LeaveClassroomModal";
+import { useAuth } from "@clerk/nextjs";
 
 interface Props {
   role: string;
   classId: string;
+  userId: string;
 }
 
-export default function ClassroomPage({ role, classId }: Props) {
+export default function ClassroomPage({ role, classId, userId }: Props) {
   const router = useRouter();
   const { data: classroom, isLoading } = useClassroom(classId);
   return (
@@ -46,7 +49,12 @@ export default function ClassroomPage({ role, classId }: Props) {
               <InviteModal classId={classId} />
             </>
           )}
+
           <ManageUserModal classId={classId} currentUserRole={role} />
+
+          {role !== "teacher" && (
+            <LeaveClassroomModal classId={classId} studentId={userId} />
+          )}
         </div>
       </div>
 
